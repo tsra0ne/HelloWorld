@@ -70,6 +70,12 @@ class ViewController: UIViewController {
         button.backgroundColor = .systemPurple
         return button
     }()
+    
+    private var label: UILabel = {
+        let label = UILabel()
+        label.text = "Welcome to Auto Layout"
+        return label
+    }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -83,6 +89,7 @@ class ViewController: UIViewController {
         view.addSubview(helloButton2)
         view.addSubview(helloButton3)
         view.addSubview(helloButton4)
+        view.addSubview(label)
     }
     
     private func setupConstraints() {
@@ -101,6 +108,10 @@ class ViewController: UIViewController {
         helloButton4.snp.makeConstraints { make in
             make.top.equalTo(helloButton3.snp.bottom).offset(10)
             make.horizontalEdges.equalTo(view.layoutMarginsGuide)
+        }
+        label.snp.makeConstraints { make in
+            make.trailing.equalTo(view.layoutMarginsGuide)
+            make.bottom.equalTo(view.safeAreaLayoutGuide)
         }
     }
     

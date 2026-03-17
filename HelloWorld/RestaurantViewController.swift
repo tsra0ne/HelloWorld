@@ -8,6 +8,13 @@
 import UIKit
 import SnapKit
 
+nonisolated struct Restaurant: Hashable {
+    let name: String
+    let location: String
+    let type: String
+    var isFavorite: Bool = false
+}
+
 class CustomCell: UITableViewCell {
     
     static let identifier = "CustomCell"
@@ -72,6 +79,11 @@ class CustomCell: UITableViewCell {
         setupViews()
         setupConstraints()
         tintColor = .systemYellow
+//        preservesSuperviewLayoutMargins = false
+//        contentView.preservesSuperviewLayoutMargins = false
+//        layoutMargins = .zero
+//        contentView.layoutMargins = UIEdgeInsets(top: 10, left: 20, bottom: 10, right: 20)
+//        separatorInset = .zero
     }
     
     required init?(coder: NSCoder) {
@@ -89,15 +101,17 @@ class CustomCell: UITableViewCell {
     
     private func setupConstraints() {
         containerStackView.snp.makeConstraints { make in
-            make.edges.equalToSuperview().inset(10)
+            make.edges.equalTo(contentView.layoutMarginsGuide)
         }
         restaurantImage.snp.makeConstraints { make in
             make.width.height.equalTo(120)
         }
     }
     
-    func configure(name: String) {
-        restaurantLabel.text = name
+    func configure(restaurant: Restaurant) {
+        restaurantLabel.text = restaurant.name
+        locationLabel.text = restaurant.location
+        typeLabel.text = restaurant.type
     }
 }
 
@@ -188,68 +202,72 @@ class CustomCellFinal: UITableViewCell {
     
     private func setupConstraints() {
         containerStackView.snp.makeConstraints { make in
-            make.edges.equalToSuperview().inset(20)
+            make.edges.equalTo(contentView.layoutMarginsGuide).inset(20)
         }
         restaurantImage.snp.makeConstraints { make in
             make.height.equalTo(200)
         }
     }
     
-    func configure(name: String) {
-        restaurantLabel.text = name
+    func configure(restaurant: Restaurant) {
+        restaurantLabel.text = restaurant.name
+        locationLabel.text = restaurant.location
+        typeLabel.text = restaurant.type
     }
 }
 
 
 class RestaurantViewController: UIViewController {
     
-    private var restaurantNames = [
-        "Bites & Brilliance",
-        "Savory Sojourn",
-        "The Gilded Plate",
-        "Azure Evenings",
-        "The Gourmet Hearth",
-        "The Sizzling Sirloin",
-        "Happy Spoon",
-        "Nomad Nibbles",
-        "Verdant Ventures",
-        "Ready to Wok",
-        "The Codfather",
-        "Eggtastic Breakfasts",
-        "Taco Bout It",
-        "Burger Meister",
-        "The Fresh and the Furious",
-        "Bella Vita",
-        "The Rusty Spoon",
-        "Urban Kitchen",
-        "Blue Moon",
-        "Culinary Canopy",
-        "Taste & Tell Bistro",
-        "The Gastronomy Gallery",
-        "Fork & Fortune Cafe",
-        "Crave & Create Kitchen",
-        "The Griddle Cafe",
-        "Rise & Dine",
-        "The Supper Club",
-        "Sunny Side Up",
-        "The Lazy Skillet",
-        "Brunch & Bubbles"
+    private var restaurants: [Restaurant] = [
+        Restaurant(name: "Bites & Brilliance", location: "Downtown", type: "Fusion"),
+        Restaurant(name: "Savory Sojourn", location: "Uptown", type: "Contemporary"),
+        Restaurant(name: "The Gilded Plate", location: "Old Town", type: "Fine Dining"),
+        Restaurant(name: "Azure Evenings", location: "Waterfront", type: "Seafood"),
+        Restaurant(name: "The Gourmet Hearth", location: "Midtown", type: "Modern American"),
+        Restaurant(name: "The Sizzling Sirloin", location: "Market District", type: "Steakhouse"),
+        Restaurant(name: "Happy Spoon", location: "City Center", type: "Comfort Food"),
+        Restaurant(name: "Nomad Nibbles", location: "Arts Quarter", type: "Street Food"),
+        Restaurant(name: "Verdant Ventures", location: "Garden Lane", type: "Vegetarian"),
+        Restaurant(name: "Ready to Wok", location: "Chinatown", type: "Asian"),
+        Restaurant(name: "The Codfather", location: "Harbor", type: "Seafood"),
+        Restaurant(name: "Eggtastic Breakfasts", location: "Sunrise Blvd", type: "Breakfast"),
+        Restaurant(name: "Taco Bout It", location: "Fiesta Ave", type: "Mexican"),
+        Restaurant(name: "Burger Meister", location: "Main Street", type: "Burgers"),
+        Restaurant(name: "The Fresh and the Furious", location: "Riverside", type: "Fast Casual"),
+        Restaurant(name: "Bella Vita", location: "Little Italy", type: "Italian"),
+        Restaurant(name: "The Rusty Spoon", location: "Warehouse District", type: "Gastropub"),
+        Restaurant(name: "Urban Kitchen", location: "Tech Park", type: "Modern"),
+        Restaurant(name: "Blue Moon", location: "Night Market", type: "Bar & Grill"),
+        Restaurant(name: "Culinary Canopy", location: "Greenway", type: "Organic"),
+        Restaurant(name: "Taste & Tell Bistro", location: "Boutique Row", type: "Bistro"),
+        Restaurant(name: "The Gastronomy Gallery", location: "Museum Mile", type: "Eclectic"),
+        Restaurant(name: "Fork & Fortune Cafe", location: "Financial District", type: "Cafe"),
+        Restaurant(name: "Crave & Create Kitchen", location: "Makers Alley", type: "Contemporary"),
+        Restaurant(name: "The Griddle Cafe", location: "Breakfast Corner", type: "Diner"),
+        Restaurant(name: "Rise & Dine", location: "Sunset Strip", type: "Brunch"),
+        Restaurant(name: "The Supper Club", location: "Grand Plaza", type: "American"),
+        Restaurant(name: "Sunny Side Up", location: "Morning Side", type: "Breakfast"),
+        Restaurant(name: "The Lazy Skillet", location: "Countryside", type: "Home Cooking"),
+        Restaurant(name: "Brunch & Bubbles", location: "Soho", type: "Brunch")
       ]
     
-    typealias DataSource = UITableViewDiffableDataSource<Section, String>
-    typealias Snapshot = NSDiffableDataSourceSnapshot<Section, String>
+    typealias DataSource = UITableViewDiffableDataSource<Section, Restaurant>
+    typealias Snapshot = NSDiffableDataSourceSnapshot<Section, Restaurant>
     
     var dataSource: DataSource!
     
     private func configureDataSource() {
         dataSource = DataSource(tableView: tableView) { tableView, indexPath, itemIdentifier in
+            let restaurant = self.restaurants[indexPath.row]
             let cell = tableView.dequeueReusableCell(withIdentifier: CustomCell.identifier, for: indexPath) as! CustomCell
-            cell.configure(name: self.restaurantNames[indexPath.row])
+            cell.configure(restaurant: restaurant)
+            cell.accessoryType = restaurant.isFavorite ? .checkmark : .none
             return cell
         }
     }
     
-    private func applySnapshot(data: [String], animatingDifferences: Bool = true) {
+    private func applySnapshot(data: [Restaurant], animatingDifferences: Bool = true) {
         var snapshot = Snapshot()
         snapshot.appendSections([.main])
         snapshot.appendItems(data)
@@ -270,7 +288,7 @@ class RestaurantViewController: UIViewController {
         setupViews()
         setupConstraints()
         configureDataSource()
-        applySnapshot(data: restaurantNames)
+        applySnapshot(data: restaurants)
     }
     
     private func setupViews() {
@@ -279,6 +297,7 @@ class RestaurantViewController: UIViewController {
 //        tableView.estimatedRowHeight = 140
         tableView.separatorStyle = .none
         tableView.delegate = self
+        tableView.cellLayoutMarginsFollowReadableWidth = true
         tableView.register(CustomCell.self, forCellReuseIdentifier: CustomCell.identifier)
         tableView.register(CustomCellFinal.self, forCellReuseIdentifier: CustomCellFinal.identifier)
         view.addSubview(tableView)
@@ -298,11 +317,12 @@ extension RestaurantViewController: UITableViewDelegate {
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
         optionMenu.addAction(cancelAction)
         
-//        if let popover = optionMenu.popoverPresentationController {
-//            popover.sourceView = tableView
-//            popover.sourceRect = tableView.rectForRow(at: indexPath)
-//            popover.permittedArrowDirections = .any
-//        }
+        if let popover = optionMenu.popoverPresentationController {
+            if let cell = tableView.cellForRow(at: indexPath) {
+                popover.sourceView = cell
+                popover.sourceRect = cell.bounds
+            }
+        }
         
         let reserveActionHandler = { (action: UIAlertAction) -> Void in
             let alertMessage = UIAlertController(title: "Not available yet", message: "Sorry, this feature is not available yet. Please retry later.", preferredStyle: .alert)
@@ -317,6 +337,7 @@ extension RestaurantViewController: UITableViewDelegate {
         let favoriteAction = UIAlertAction(title: "Mark as favorite", style: .default) { action in
             let cell = tableView.cellForRow(at: indexPath)
             cell?.accessoryType = .checkmark
+            self.restaurants[indexPath.row].isFavorite = true
         }
         
         optionMenu.addAction(favoriteAction)
@@ -324,6 +345,57 @@ extension RestaurantViewController: UITableViewDelegate {
         present(optionMenu, animated: true)
         
         tableView.deselectRow(at: indexPath, animated: true)
+    }
+}
+
+extension RestaurantViewController {
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        guard let restaurant = self.dataSource.itemIdentifier(for: indexPath) else {
+            return UISwipeActionsConfiguration()
+        }
+        
+        let deleteAction = UIContextualAction(style: .destructive, title: "Delete") { (action, view, completionHandler) in
+            var snapshot = self.dataSource.snapshot()
+            snapshot.deleteItems([restaurant])
+            self.dataSource.apply(snapshot)
+            completionHandler(true)
+        }
+        
+        let shareAction = UIContextualAction(style: .normal, title: "Share") { (action, view, completionHandler) in
+            let activityViewController = UIActivityViewController(activityItems: ["Check out this restaurant!"], applicationActivities: nil)
+            self.present(activityViewController, animated: true)
+            completionHandler(true)
+        }
+        
+        deleteAction.backgroundColor = .red
+        deleteAction.image = UIImage(systemName: "trash")
+        
+        shareAction.backgroundColor = .systemBlue
+        shareAction.image = UIImage(systemName: "arrow.up")
+        
+        return UISwipeActionsConfiguration(actions: [deleteAction, shareAction])
+    }
+    
+    func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        
+        let favoriteAction = UIContextualAction(style: .normal, title: nil) { (action, view, completionHandler) in
+            let cell = tableView.cellForRow(at: indexPath) as! CustomCell
+            if self.restaurants[indexPath.row].isFavorite {
+                cell.accessoryType = .none
+                self.restaurants[indexPath.row].isFavorite = false
+                action.image = UIImage(systemName: "heart")
+            } else {
+                cell.accessoryType = .checkmark
+                self.restaurants[indexPath.row].isFavorite = true
+                action.image = UIImage(systemName: "heart.slash")
+            }
+            completionHandler(true)
+        }
+        
+        favoriteAction.backgroundColor = .systemYellow
+        favoriteAction.image = restaurants[indexPath.row].isFavorite ? UIImage(systemName: "heart.slash") : UIImage(systemName: "heart")
+        
+        return UISwipeActionsConfiguration(actions: [favoriteAction])
     }
 }
 

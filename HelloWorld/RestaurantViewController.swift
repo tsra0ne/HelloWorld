@@ -10,8 +10,9 @@ import SnapKit
 
 nonisolated struct Restaurant: Hashable {
     let name: String
-    let location: String
     let type: String
+    let location: String
+    let image: String
     var isFavorite: Bool = false
 }
 
@@ -30,7 +31,6 @@ class CustomCell: UITableViewCell {
     private var restaurantImage: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
-        imageView.image = UIImage(named: "restaurant")
         imageView.layer.cornerRadius = 20
         imageView.clipsToBounds = true
         return imageView
@@ -112,6 +112,7 @@ class CustomCell: UITableViewCell {
         restaurantLabel.text = restaurant.name
         locationLabel.text = restaurant.location
         typeLabel.text = restaurant.type
+        restaurantImage.image = UIImage(named: restaurant.image)
     }
 }
 
@@ -130,7 +131,6 @@ class CustomCellFinal: UITableViewCell {
     private var restaurantImage: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
-        imageView.image = UIImage(named: "restaurant")
         imageView.layer.cornerRadius = 20
         imageView.clipsToBounds = true
         return imageView
@@ -213,6 +213,7 @@ class CustomCellFinal: UITableViewCell {
         restaurantLabel.text = restaurant.name
         locationLabel.text = restaurant.location
         typeLabel.text = restaurant.type
+        restaurantImage.image = UIImage(named: restaurant.image)
     }
 }
 
@@ -220,37 +221,28 @@ class CustomCellFinal: UITableViewCell {
 class RestaurantViewController: UIViewController {
     
     private var restaurants: [Restaurant] = [
-        Restaurant(name: "Bites & Brilliance", location: "Downtown", type: "Fusion"),
-        Restaurant(name: "Savory Sojourn", location: "Uptown", type: "Contemporary"),
-        Restaurant(name: "The Gilded Plate", location: "Old Town", type: "Fine Dining"),
-        Restaurant(name: "Azure Evenings", location: "Waterfront", type: "Seafood"),
-        Restaurant(name: "The Gourmet Hearth", location: "Midtown", type: "Modern American"),
-        Restaurant(name: "The Sizzling Sirloin", location: "Market District", type: "Steakhouse"),
-        Restaurant(name: "Happy Spoon", location: "City Center", type: "Comfort Food"),
-        Restaurant(name: "Nomad Nibbles", location: "Arts Quarter", type: "Street Food"),
-        Restaurant(name: "Verdant Ventures", location: "Garden Lane", type: "Vegetarian"),
-        Restaurant(name: "Ready to Wok", location: "Chinatown", type: "Asian"),
-        Restaurant(name: "The Codfather", location: "Harbor", type: "Seafood"),
-        Restaurant(name: "Eggtastic Breakfasts", location: "Sunrise Blvd", type: "Breakfast"),
-        Restaurant(name: "Taco Bout It", location: "Fiesta Ave", type: "Mexican"),
-        Restaurant(name: "Burger Meister", location: "Main Street", type: "Burgers"),
-        Restaurant(name: "The Fresh and the Furious", location: "Riverside", type: "Fast Casual"),
-        Restaurant(name: "Bella Vita", location: "Little Italy", type: "Italian"),
-        Restaurant(name: "The Rusty Spoon", location: "Warehouse District", type: "Gastropub"),
-        Restaurant(name: "Urban Kitchen", location: "Tech Park", type: "Modern"),
-        Restaurant(name: "Blue Moon", location: "Night Market", type: "Bar & Grill"),
-        Restaurant(name: "Culinary Canopy", location: "Greenway", type: "Organic"),
-        Restaurant(name: "Taste & Tell Bistro", location: "Boutique Row", type: "Bistro"),
-        Restaurant(name: "The Gastronomy Gallery", location: "Museum Mile", type: "Eclectic"),
-        Restaurant(name: "Fork & Fortune Cafe", location: "Financial District", type: "Cafe"),
-        Restaurant(name: "Crave & Create Kitchen", location: "Makers Alley", type: "Contemporary"),
-        Restaurant(name: "The Griddle Cafe", location: "Breakfast Corner", type: "Diner"),
-        Restaurant(name: "Rise & Dine", location: "Sunset Strip", type: "Brunch"),
-        Restaurant(name: "The Supper Club", location: "Grand Plaza", type: "American"),
-        Restaurant(name: "Sunny Side Up", location: "Morning Side", type: "Breakfast"),
-        Restaurant(name: "The Lazy Skillet", location: "Countryside", type: "Home Cooking"),
-        Restaurant(name: "Brunch & Bubbles", location: "Soho", type: "Brunch")
-      ]
+        Restaurant(name: "Cafe Deadend", type: "Coffee & Tea Shop", location: "Hong Kong", image: "cafedeadend", isFavorite: false),
+        Restaurant(name: "Homei", type: "Cafe", location: "Hong Kong", image: "homei", isFavorite: false),
+        Restaurant(name: "Teakha", type: "Tea House", location: "Hong Kong", image: "teakha", isFavorite: false),
+        Restaurant(name: "Cafe loisl", type: "Austrian / Causual Drink", location: "Hong Kong", image: "cafeloisl", isFavorite: false),
+        Restaurant(name: "Petite Oyster", type: "French", location: "Hong Kong", image: "petiteoyster", isFavorite: false),
+        Restaurant(name: "For Kee Restaurant", type: "Bakery", location: "Hong Kong", image: "forkee", isFavorite: false),
+        Restaurant(name: "Po's Atelier", type: "Bakery", location: "Hong Kong", image: "posatelier", isFavorite: false),
+        Restaurant(name: "Bourke Street Backery", type: "Chocolate", location: "Sydney", image: "bourkestreetbakery", isFavorite: false),
+        Restaurant(name: "Haigh's Chocolate", type: "Cafe", location: "Sydney", image: "haigh", isFavorite: false),
+        Restaurant(name: "Palomino Espresso", type: "American / Seafood", location: "Sydney", image: "palomino", isFavorite: false),
+        Restaurant(name: "Upstate", type: "American", location: "New York", image: "upstate", isFavorite: false),
+        Restaurant(name: "Traif", type: "American", location: "New York", image: "traif", isFavorite: false),
+        Restaurant(name: "Graham Avenue Meats", type: "Breakfast & Brunch", location: "New York", image: "graham", isFavorite: false),
+        Restaurant(name: "Waffle & Wolf", type: "Coffee & Tea", location: "New York", image: "waffleandwolf", isFavorite: false),
+        Restaurant(name: "Five Leaves", type: "Coffee & Tea", location: "New York", image: "fiveleaves", isFavorite: false),
+        Restaurant(name: "Cafe Lore", type: "Latin American", location: "New York", image: "cafelore", isFavorite: false),
+        Restaurant(name: "Confessional", type: "Spanish", location: "New York", image: "confessional", isFavorite: false),
+        Restaurant(name: "Barrafina", type: "Spanish", location: "London", image: "barrafina", isFavorite: false),
+        Restaurant(name: "Donostia", type: "Spanish", location: "London", image: "donostia", isFavorite: false),
+        Restaurant(name: "Royal Oak", type: "British", location: "London", image: "royaloak", isFavorite: false),
+        Restaurant(name: "CASK Pub and Kitchen", type: "Thai", location: "London", image: "cask", isFavorite: false)
+    ]
     
     typealias DataSource = UITableViewDiffableDataSource<Section, Restaurant>
     typealias Snapshot = NSDiffableDataSourceSnapshot<Section, Restaurant>
@@ -285,6 +277,10 @@ class RestaurantViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        title = "FoodPin"
+        navigationController?.navigationBar.prefersLargeTitles = true
+        
         setupViews()
         setupConstraints()
         configureDataSource()
@@ -312,37 +308,42 @@ class RestaurantViewController: UIViewController {
 
 extension RestaurantViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let optionMenu = UIAlertController(title: nil, message: "What do you want to do?", preferredStyle: .actionSheet)
+//        let optionMenu = UIAlertController(title: nil, message: "What do you want to do?", preferredStyle: .actionSheet)
+//        
+//        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+//        optionMenu.addAction(cancelAction)
+//        
+//        if let popover = optionMenu.popoverPresentationController {
+//            if let cell = tableView.cellForRow(at: indexPath) {
+//                popover.sourceView = cell
+//                popover.sourceRect = cell.bounds
+//            }
+//        }
+//        
+//        let reserveActionHandler = { (action: UIAlertAction) -> Void in
+//            let alertMessage = UIAlertController(title: "Not available yet", message: "Sorry, this feature is not available yet. Please retry later.", preferredStyle: .alert)
+//            alertMessage.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+//            self.present(alertMessage, animated: true)
+//        }
+//        
+//        let reserveAction = UIAlertAction(title: "Reserve a table", style: .default, handler: reserveActionHandler)
+//        
+//        optionMenu.addAction(reserveAction)
+//        
+//        let favoriteAction = UIAlertAction(title: "Mark as favorite", style: .default) { action in
+//            let cell = tableView.cellForRow(at: indexPath)
+//            cell?.accessoryType = .checkmark
+//            self.restaurants[indexPath.row].isFavorite = true
+//        }
+//        
+//        optionMenu.addAction(favoriteAction)
+//        
+//        present(optionMenu, animated: true)
         
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
-        optionMenu.addAction(cancelAction)
+        let detailVC = DetailViewController()
+        detailVC.configure(restaurant: restaurants[indexPath.row])
         
-        if let popover = optionMenu.popoverPresentationController {
-            if let cell = tableView.cellForRow(at: indexPath) {
-                popover.sourceView = cell
-                popover.sourceRect = cell.bounds
-            }
-        }
-        
-        let reserveActionHandler = { (action: UIAlertAction) -> Void in
-            let alertMessage = UIAlertController(title: "Not available yet", message: "Sorry, this feature is not available yet. Please retry later.", preferredStyle: .alert)
-            alertMessage.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-            self.present(alertMessage, animated: true)
-        }
-        
-        let reserveAction = UIAlertAction(title: "Reserve a table", style: .default, handler: reserveActionHandler)
-        
-        optionMenu.addAction(reserveAction)
-        
-        let favoriteAction = UIAlertAction(title: "Mark as favorite", style: .default) { action in
-            let cell = tableView.cellForRow(at: indexPath)
-            cell?.accessoryType = .checkmark
-            self.restaurants[indexPath.row].isFavorite = true
-        }
-        
-        optionMenu.addAction(favoriteAction)
-        
-        present(optionMenu, animated: true)
+        navigationController?.pushViewController(detailVC, animated: true)
         
         tableView.deselectRow(at: indexPath, animated: true)
     }

@@ -17,9 +17,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         
         #if DEBUG
-        debugSwift.setup()
+//        debugSwift.setup()
         // debugSwift.setup(disable: [.leaksDetector])
-        debugSwift.show()
+//        debugSwift.show()
         #endif
         
         return true

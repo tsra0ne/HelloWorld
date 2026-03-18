@@ -12,6 +12,9 @@ nonisolated struct Restaurant: Hashable {
     let name: String
     let type: String
     let location: String
+    let fullAddress: String
+    let phone: String
+    let description: String
     let image: String
     var isFavorite: Bool = false
 }
@@ -221,27 +224,27 @@ class CustomCellFinal: UITableViewCell {
 class RestaurantViewController: UIViewController {
     
     private var restaurants: [Restaurant] = [
-        Restaurant(name: "Cafe Deadend", type: "Coffee & Tea Shop", location: "Hong Kong", image: "cafedeadend", isFavorite: false),
-        Restaurant(name: "Homei", type: "Cafe", location: "Hong Kong", image: "homei", isFavorite: false),
-        Restaurant(name: "Teakha", type: "Tea House", location: "Hong Kong", image: "teakha", isFavorite: false),
-        Restaurant(name: "Cafe loisl", type: "Austrian / Causual Drink", location: "Hong Kong", image: "cafeloisl", isFavorite: false),
-        Restaurant(name: "Petite Oyster", type: "French", location: "Hong Kong", image: "petiteoyster", isFavorite: false),
-        Restaurant(name: "For Kee Restaurant", type: "Bakery", location: "Hong Kong", image: "forkee", isFavorite: false),
-        Restaurant(name: "Po's Atelier", type: "Bakery", location: "Hong Kong", image: "posatelier", isFavorite: false),
-        Restaurant(name: "Bourke Street Backery", type: "Chocolate", location: "Sydney", image: "bourkestreetbakery", isFavorite: false),
-        Restaurant(name: "Haigh's Chocolate", type: "Cafe", location: "Sydney", image: "haigh", isFavorite: false),
-        Restaurant(name: "Palomino Espresso", type: "American / Seafood", location: "Sydney", image: "palomino", isFavorite: false),
-        Restaurant(name: "Upstate", type: "American", location: "New York", image: "upstate", isFavorite: false),
-        Restaurant(name: "Traif", type: "American", location: "New York", image: "traif", isFavorite: false),
-        Restaurant(name: "Graham Avenue Meats", type: "Breakfast & Brunch", location: "New York", image: "graham", isFavorite: false),
-        Restaurant(name: "Waffle & Wolf", type: "Coffee & Tea", location: "New York", image: "waffleandwolf", isFavorite: false),
-        Restaurant(name: "Five Leaves", type: "Coffee & Tea", location: "New York", image: "fiveleaves", isFavorite: false),
-        Restaurant(name: "Cafe Lore", type: "Latin American", location: "New York", image: "cafelore", isFavorite: false),
-        Restaurant(name: "Confessional", type: "Spanish", location: "New York", image: "confessional", isFavorite: false),
-        Restaurant(name: "Barrafina", type: "Spanish", location: "London", image: "barrafina", isFavorite: false),
-        Restaurant(name: "Donostia", type: "Spanish", location: "London", image: "donostia", isFavorite: false),
-        Restaurant(name: "Royal Oak", type: "British", location: "London", image: "royaloak", isFavorite: false),
-        Restaurant(name: "CASK Pub and Kitchen", type: "Thai", location: "London", image: "cask", isFavorite: false)
+        Restaurant(name: "Cafe Deadend", type: "Coffee & Tea Shop", location: "Hong Kong", fullAddress: "G/F, 72 Po Hing Fong, Sheung Wan, Hong Kong", phone: "232-923423", description: "Searching for great breakfast eateries and coffee? This place is for you. We open at 6:30 every morning, and close at 9 PM. We offer espresso and espresso based drink, such as capuccino, cafe latte, piccolo and many more. Come over and enjoy a great meal.", image: "cafedeadend", isFavorite: false),
+        Restaurant(name: "Homei", type: "Cafe", location: "Hong Kong", fullAddress: "18 Tai Ping Shan St, Sheung Wan, Hong Kong", phone: "232-923423", description: "A cozy cafe with artisanal pastries and great coffee.", image: "homei", isFavorite: false),
+        Restaurant(name: "Teakha", type: "Tea House", location: "Hong Kong", fullAddress: "12-14 Yat Fu Ln, Sheung Wan, Hong Kong", phone: "232-923423", description: "Specialty teas and light bites in a relaxing space.", image: "teakha", isFavorite: false),
+        Restaurant(name: "Cafe loisl", type: "Austrian / Causual Drink", location: "Hong Kong", fullAddress: "9-11 Po Yan St, Sheung Wan, Hong Kong", phone: "232-923423", description: "Austrian-inspired cafe with casual drinks and snacks.", image: "cafeloisl", isFavorite: false),
+        Restaurant(name: "Petite Oyster", type: "French", location: "Hong Kong", fullAddress: "3 Ship St, Wan Chai, Hong Kong", phone: "232-923423", description: "Fresh oysters and classic French small plates.", image: "petiteoyster", isFavorite: false),
+        Restaurant(name: "For Kee Restaurant", type: "Bakery", location: "Hong Kong", fullAddress: "200 Hollywood Rd, Sheung Wan, Hong Kong", phone: "232-923423", description: "Traditional bakery known for its pork chop buns.", image: "forkee", isFavorite: false),
+        Restaurant(name: "Po's Atelier", type: "Bakery", location: "Hong Kong", fullAddress: "62 Po Hing Fong, Sheung Wan, Hong Kong", phone: "232-923423", description: "Artisan breads and pastries made fresh daily.", image: "posatelier", isFavorite: false),
+        Restaurant(name: "Bourke Street Backery", type: "Chocolate", location: "Sydney", fullAddress: "615 Bourke St, Surry Hills NSW 2010, Australia", phone: "232-923423", description: "Beloved spot for chocolates and sweet treats.", image: "bourkestreetbakery", isFavorite: false),
+        Restaurant(name: "Haigh's Chocolate", type: "Cafe", location: "Sydney", fullAddress: "143 King St, Sydney NSW 2000, Australia", phone: "232-923423", description: "Premium chocolates and a charming cafe experience.", image: "haigh", isFavorite: false),
+        Restaurant(name: "Palomino Espresso", type: "American / Seafood", location: "Sydney", fullAddress: "1-7 Clarence St, Sydney NSW 2000, Australia", phone: "232-923423", description: "Espresso bar with a hearty American/seafood menu.", image: "palomino", isFavorite: false),
+        Restaurant(name: "Upstate", type: "American", location: "New York", fullAddress: "95 1st Ave, New York, NY 10003, USA", phone: "232-923423", description: "American comfort food with local ingredients.", image: "upstate", isFavorite: false),
+        Restaurant(name: "Traif", type: "American", location: "New York", fullAddress: "229 S 4th St, Brooklyn, NY 11211, USA", phone: "232-923423", description: "Inventive American dishes in a lively setting.", image: "traif", isFavorite: false),
+        Restaurant(name: "Graham Avenue Meats", type: "Breakfast & Brunch", location: "New York", fullAddress: "445 Graham Ave, Brooklyn, NY 11211, USA", phone: "232-923423", description: "Classic deli sandwiches and brunch favorites.", image: "graham", isFavorite: false),
+        Restaurant(name: "Waffle & Wolf", type: "Coffee & Tea", location: "New York", fullAddress: "413 Graham Ave, Brooklyn, NY 11211, USA", phone: "232-923423", description: "Creative waffle sandwiches and great coffee.", image: "waffleandwolf", isFavorite: false),
+        Restaurant(name: "Five Leaves", type: "Coffee & Tea", location: "New York", fullAddress: "18 Bedford Ave, Brooklyn, NY 11222, USA", phone: "232-923423", description: "Neighborhood staple for coffee and brunch.", image: "fiveleaves", isFavorite: false),
+        Restaurant(name: "Cafe Lore", type: "Latin American", location: "New York", fullAddress: "46 1st Ave, New York, NY 10009, USA", phone: "232-923423", description: "Latin American flavors with a modern twist.", image: "cafelore", isFavorite: false),
+        Restaurant(name: "Confessional", type: "Spanish", location: "New York", fullAddress: "308 E 6th St, New York, NY 10003, USA", phone: "232-923423", description: "Tapas and Spanish wines in an intimate space.", image: "confessional", isFavorite: false),
+        Restaurant(name: "Barrafina", type: "Spanish", location: "London", fullAddress: "10 Adelaide St, London WC2N 4HZ, UK", phone: "232-923423", description: "Acclaimed Spanish tapas bar.", image: "barrafina", isFavorite: false),
+        Restaurant(name: "Donostia", type: "Spanish", location: "London", fullAddress: "10 Seymour Pl, London W1H 7ND, UK", phone: "232-923423", description: "Basque-inspired tapas and pintxos.", image: "donostia", isFavorite: false),
+        Restaurant(name: "Royal Oak", type: "British", location: "London", fullAddress: "2 Regency St, London SW1P 4BZ, UK", phone: "232-923423", description: "Traditional British pub fare done right.", image: "royaloak", isFavorite: false),
+        Restaurant(name: "CASK Pub and Kitchen", type: "Thai", location: "London", fullAddress: "6 Charlwood St, London SW1V 2EE, UK", phone: "232-923423", description: "Craft beers with an eclectic Thai-inspired menu.", image: "cask", isFavorite: false)
     ]
     
     typealias DataSource = UITableViewDiffableDataSource<Section, Restaurant>

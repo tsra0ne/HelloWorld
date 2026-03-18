@@ -56,6 +56,7 @@ class DetailViewController: UIViewController {
             label.font = UIFontMetrics(forTextStyle: .title1).scaledFont(for: customFont)
         }
         label.adjustsFontForContentSizeCategory = true
+        label.adjustsFontSizeToFitWidth = true
         label.numberOfLines = 0
         return label
     }()
@@ -68,6 +69,7 @@ class DetailViewController: UIViewController {
             label.font = UIFontMetrics(forTextStyle: .headline).scaledFont(for: customFont)
         }
         label.adjustsFontForContentSizeCategory = true
+        label.adjustsFontSizeToFitWidth = true
         label.backgroundColor = .black
         return label
     }()
@@ -77,10 +79,28 @@ class DetailViewController: UIViewController {
         return button
     }()
     
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        navigationController?.hidesBarsOnSwipe = false
+        
         setupViews()
         setupConstraints()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.hidesBarsOnSwipe = false
+        navigationController?.setNavigationBarHidden(false, animated: true)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        navigationController?.navigationBar.prefersLargeTitles = true
     }
     
     private func setupViews() {
@@ -88,6 +108,7 @@ class DetailViewController: UIViewController {
         
         view.backgroundColor = .systemBackground
         view.addSubview(tableView)
+        tableView.contentInsetAdjustmentBehavior = .never
         tableView.dataSource = self
         tableView.delegate = self
         tableView.separatorStyle = .none
@@ -124,7 +145,6 @@ class DetailViewController: UIViewController {
     
     func configure(restaurant: Restaurant) {
         self.restaurant = restaurant
-        title = restaurant.name
         restaurantLabel.text = restaurant.name
         typeLabel.text = restaurant.type
         headerImageView.image = UIImage(named: restaurant.image)
@@ -187,9 +207,10 @@ class RestaurantDetailTextCell: UITableViewCell {
     private var descriptionLabel: UILabel = {
         let label = UILabel()
         label.adjustsFontSizeToFitWidth = true
-        label.textColor = .white
+        label.textColor = .label
         label.font = .preferredFont(forTextStyle: .body)
         label.adjustsFontForContentSizeCategory = true
+        label.adjustsFontSizeToFitWidth = true
         label.numberOfLines = 0
         return label
     }()
@@ -252,9 +273,10 @@ class RestaurantDetailTwoColumnCell: UITableViewCell {
     private var addressTitleLabel: UILabel = {
         let label = UILabel()
         label.adjustsFontSizeToFitWidth = true
-        label.textColor = .white
+        label.textColor = .label
         label.font = .preferredFont(forTextStyle: .headline)
         label.adjustsFontForContentSizeCategory = true
+        label.adjustsFontSizeToFitWidth = true
         label.text = "Address"
         label.numberOfLines = 0
         return label
@@ -263,9 +285,10 @@ class RestaurantDetailTwoColumnCell: UITableViewCell {
     private var addressLabel: UILabel = {
         let label = UILabel()
         label.adjustsFontSizeToFitWidth = true
-        label.textColor = .white
+        label.textColor = .label
         label.font = .preferredFont(forTextStyle: .body)
         label.adjustsFontForContentSizeCategory = true
+        label.adjustsFontSizeToFitWidth = true
         label.text = "Full Address"
         label.numberOfLines = 0
         return label
@@ -274,9 +297,10 @@ class RestaurantDetailTwoColumnCell: UITableViewCell {
     private var phoneTitleLabel: UILabel = {
         let label = UILabel()
         label.adjustsFontSizeToFitWidth = true
-        label.textColor = .white
+        label.textColor = .label
         label.font = .preferredFont(forTextStyle: .headline)
         label.adjustsFontForContentSizeCategory = true
+        label.adjustsFontSizeToFitWidth = true
         label.text = "Phone"
         label.numberOfLines = 0
         return label
@@ -285,9 +309,10 @@ class RestaurantDetailTwoColumnCell: UITableViewCell {
     private var phoneLabel: UILabel = {
         let label = UILabel()
         label.adjustsFontSizeToFitWidth = true
-        label.textColor = .white
+        label.textColor = .label
         label.font = .preferredFont(forTextStyle: .body)
         label.adjustsFontForContentSizeCategory = true
+        label.adjustsFontSizeToFitWidth = true
         label.text = "Phone Number"
         label.numberOfLines = 0
         return label

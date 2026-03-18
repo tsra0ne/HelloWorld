@@ -53,6 +53,7 @@ class CustomCell: UITableViewCell {
         label.textColor = .label
         label.font = .preferredFont(forTextStyle: .title2)
         label.adjustsFontForContentSizeCategory = true
+        label.adjustsFontSizeToFitWidth = true
         return label
     }()
     
@@ -63,6 +64,7 @@ class CustomCell: UITableViewCell {
         label.textColor = .label
         label.font = .preferredFont(forTextStyle: .body)
         label.adjustsFontForContentSizeCategory = true
+        label.adjustsFontSizeToFitWidth = true
         return label
     }()
     
@@ -73,6 +75,7 @@ class CustomCell: UITableViewCell {
         label.textColor = .black
         label.font = .preferredFont(forTextStyle: .subheadline)
         label.adjustsFontForContentSizeCategory = true
+        label.adjustsFontSizeToFitWidth = true
         label.textColor = .systemGray
         return label
     }()
@@ -160,6 +163,7 @@ class CustomCellFinal: UITableViewCell {
         label.textColor = .label
         label.font = .preferredFont(forTextStyle: .title2)
         label.adjustsFontForContentSizeCategory = true
+        label.adjustsFontSizeToFitWidth = true
         return label
     }()
     
@@ -170,6 +174,7 @@ class CustomCellFinal: UITableViewCell {
         label.textColor = .label
         label.font = .preferredFont(forTextStyle: .body)
         label.adjustsFontForContentSizeCategory = true
+        label.adjustsFontSizeToFitWidth = true
         return label
     }()
     
@@ -180,6 +185,7 @@ class CustomCellFinal: UITableViewCell {
         label.textColor = .black
         label.font = .preferredFont(forTextStyle: .subheadline)
         label.adjustsFontForContentSizeCategory = true
+        label.adjustsFontSizeToFitWidth = true
         label.textColor = .systemGray
         return label
     }()
@@ -283,11 +289,30 @@ class RestaurantViewController: UIViewController {
         
         title = "FoodPin"
         navigationController?.navigationBar.prefersLargeTitles = true
+        navigationController?.hidesBarsOnSwipe = true
+        
+        if let appearance = navigationController?.navigationBar.standardAppearance {
+            appearance.configureWithTransparentBackground()
+            
+            if let customFont = UIFont(name: "Nunito-Bold", size: 45.0) {
+                appearance.titleTextAttributes = [.foregroundColor: UIColor(red: 218/255, green: 96/255, blue: 51/225, alpha: 1.0)]
+                appearance.largeTitleTextAttributes = [.foregroundColor: UIColor(red: 218/255, green: 96/255, blue: 51/225, alpha: 1.0), .font: customFont]
+            }
+            
+            navigationController?.navigationBar.standardAppearance = appearance
+            navigationController?.navigationBar.compactAppearance = appearance
+            navigationController?.navigationBar.scrollEdgeAppearance = appearance
+        }
         
         setupViews()
         setupConstraints()
         configureDataSource()
         applySnapshot(data: restaurants)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.hidesBarsOnSwipe = true
     }
     
     private func setupViews() {

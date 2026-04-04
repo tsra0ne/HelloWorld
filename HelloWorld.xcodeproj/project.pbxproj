@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		AF40A90C2F5C519900C1A957 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = AF40A90B2F5C519900C1A957 /* SnapKit */; };
-		D7D519612F69BE620019B14E /* DebugSwift in Frameworks */ = {isa = PBXBuildFile; productRef = D7D519602F69BE620019B14E /* DebugSwift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -41,7 +40,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D7D519612F69BE620019B14E /* DebugSwift in Frameworks */,
 				AF40A90C2F5C519900C1A957 /* SnapKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -86,7 +84,6 @@
 			name = HelloWorld;
 			packageProductDependencies = (
 				AF40A90B2F5C519900C1A957 /* SnapKit */,
-				D7D519602F69BE620019B14E /* DebugSwift */,
 			);
 			productName = HelloWorld;
 			productReference = AF40A8F22F5C4E3100C1A957 /* HelloWorld.app */;
@@ -119,7 +116,6 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				AF40A90A2F5C519900C1A957 /* XCRemoteSwiftPackageReference "SnapKit" */,
-				D7D5195F2F69BE620019B14E /* XCRemoteSwiftPackageReference "DebugSwift" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = AF40A8F32F5C4E3100C1A957 /* Products */;
@@ -372,14 +368,6 @@
 				version = 5.7.1;
 			};
 		};
-		D7D5195F2F69BE620019B14E /* XCRemoteSwiftPackageReference "DebugSwift" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/DebugSwift/DebugSwift.git";
-			requirement = {
-				kind = exactVersion;
-				version = 1.13.0;
-			};
-		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -387,11 +375,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = AF40A90A2F5C519900C1A957 /* XCRemoteSwiftPackageReference "SnapKit" */;
 			productName = SnapKit;
-		};
-		D7D519602F69BE620019B14E /* DebugSwift */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = D7D5195F2F69BE620019B14E /* XCRemoteSwiftPackageReference "DebugSwift" */;
-			productName = DebugSwift;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

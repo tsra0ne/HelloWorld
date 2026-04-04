@@ -7,6 +7,7 @@
 
 import UIKit
 import SnapKit
+import MapKit
 
 class DetailViewController: UIViewController {
     
@@ -17,7 +18,7 @@ class DetailViewController: UIViewController {
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 60
         tableView.separatorStyle = .singleLine
-        tableView.allowsSelection = false
+        tableView.allowsSelection = true
         return tableView
     }()
     
@@ -115,6 +116,7 @@ class DetailViewController: UIViewController {
         tableView.rowHeight = UITableView.automaticDimension
         tableView.register(RestaurantDetailTextCell.self, forCellReuseIdentifier: RestaurantDetailTextCell.identifier)
         tableView.register(RestaurantDetailTwoColumnCell.self, forCellReuseIdentifier: RestaurantDetailTwoColumnCell.identifier)
+        tableView.register(RestaurantDetailMapCell.self, forCellReuseIdentifier: RestaurantDetailMapCell.identifier)
         tableHeaderView.frame = CGRect(x: 0, y: 0, width: tableView.frame.width, height: 445)
         tableView.tableHeaderView = tableHeaderView
         tableHeaderView.addSubview(headerImageView)
@@ -173,7 +175,7 @@ class DetailViewController: UIViewController {
 extension DetailViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 2
+        return 3
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -181,10 +183,17 @@ extension DetailViewController: UITableViewDataSource, UITableViewDelegate {
         case 0:
             let cell = tableView.dequeueReusableCell(withIdentifier: RestaurantDetailTextCell.identifier, for: indexPath) as! RestaurantDetailTextCell
             cell.configure(with: restaurant?.description)
+            cell.selectionStyle = .none
             return cell
         case 1:
             let cell = tableView.dequeueReusableCell(withIdentifier: RestaurantDetailTwoColumnCell.identifier, for: indexPath) as! RestaurantDetailTwoColumnCell
             cell.configure(with: restaurant)
+            cell.selectionStyle = .none
+            return cell
+        case 2:
+            let cell = tableView.dequeueReusableCell(withIdentifier: RestaurantDetailMapCell.identifier, for: indexPath) as! RestaurantDetailMapCell
+            cell.configure(with: restaurant)
+            cell.selectionStyle = .none
             return cell
         default:
             fatalError("Unhandled Row")
@@ -198,6 +207,13 @@ extension DetailViewController: UITableViewDataSource, UITableViewDelegate {
 //    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
 //        return tableHeaderView
 //    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        guard indexPath.row == 2 else { return }
+        let detailMapViewController = DetailMapViewController(restaurant: restaurant)
+        navigationController?.pushViewController(detailMapViewController, animated: true)
+    }
 }
 
 class RestaurantDetailTextCell: UITableViewCell {
@@ -349,4 +365,71 @@ class RestaurantDetailTwoColumnCell: UITableViewCell {
         phoneLabel.text = restaurant?.phone
     }
     
+}
+
+class RestaurantDetailMapCell: UITableViewCell {
+    static let identifier = "RestaurantDetailMapCell"
+    
+    private let mapView: MKMapView = {
+        let mapView = MKMapView()
+        return mapView
+    }()
+    
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        setupViews()
+        setupConstraints()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    func setupViews() {
+        mapView.layer.cornerRadius = 20
+        mapView.clipsToBounds = true
+        contentView.addSubview(mapView)
+    }
+    
+    func setupConstraints() {
+        mapView.snp.makeConstraints { make in
+            make.leading.trailing.equalToSuperview().inset(20)
+            make.top.bottom.equalToSuperview().inset(10)
+            make.height.equalTo(200)
+        }
+    }
+    
+    func configure(with restaurant: Restaurant?) {
+        guard let query = restaurant?.location, !query.isEmpty else { return }
+
+        let request = MKLocalSearch.Request()
+        request.naturalLanguageQuery = query
+
+        // If you have a general region to bias results, you can set it here; otherwise, use the current map visible region
+        request.region = mapView.region
+
+        let search = MKLocalSearch(request: request)
+        search.start { [weak self] response, error in
+            guard let self = self else { return }
+            // Clear existing annotations
+            self.mapView.removeAnnotations(self.mapView.annotations)
+
+            guard error == nil, let mapItem = response?.mapItems.first else { return }
+
+            let coordinate = mapItem.location.coordinate
+            let annotation = MKPointAnnotation()
+            annotation.coordinate = coordinate
+//            annotation.title = restaurant?.name
+
+            self.mapView.addAnnotation(annotation)
+
+            // Zoom to a reasonable region around the found coordinate
+//            let span = MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
+//            let region = MKCoordinateRegion(center: coordinate, span: span)
+//            self.mapView.setRegion(region, animated: true)
+            
+            let region = MKCoordinateRegion(center: annotation.coordinate, latitudinalMeters: 250, longitudinalMeters: 250)
+            self.mapView.setRegion(region, animated: false)
+        }
+    }
 }

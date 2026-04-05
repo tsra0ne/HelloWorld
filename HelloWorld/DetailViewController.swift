@@ -27,6 +27,11 @@ class DetailViewController: UIViewController {
         return view
     }()
     
+    private let tableFooterView: UIView = {
+        let view = UIView()
+        return view
+    }()
+    
     private let dimView: UIView = {
         let view = UIView()
         view.alpha = 0.2
@@ -77,6 +82,28 @@ class DetailViewController: UIViewController {
     
     private var heartButton: UIButton = {
         let button = UIButton()
+        button.isHidden = true
+        return button
+    }()
+    
+    private var ratingImageView: UIImageView = {
+        let imageView = UIImageView()
+        return imageView
+    }()
+    
+    private var rateButton: UIButton = {
+        let button = UIButton()
+        var config = UIButton.Configuration.filled()
+        config.baseBackgroundColor = .systemRed
+        config.cornerStyle = .dynamic
+        config.background.cornerRadius = 25
+        button.configuration = config
+        let attributedTitle = NSAttributedString(
+            string: "Rate it",
+            attributes: [.font: UIFont.preferredFont(forTextStyle: .headline)]
+        )
+        button.setAttributedTitle(attributedTitle, for: .normal)
+        button.addTarget(nil, action: #selector(rateButtonTapped), for: .touchUpInside)
         return button
     }()
     
@@ -119,12 +146,16 @@ class DetailViewController: UIViewController {
         tableView.register(RestaurantDetailMapCell.self, forCellReuseIdentifier: RestaurantDetailMapCell.identifier)
         tableHeaderView.frame = CGRect(x: 0, y: 0, width: tableView.frame.width, height: 445)
         tableView.tableHeaderView = tableHeaderView
+        tableFooterView.frame = CGRect(x: 0, y: 0, width: tableView.frame.width, height: 90)
+        tableView.tableFooterView = tableFooterView
         tableHeaderView.addSubview(headerImageView)
         tableHeaderView.addSubview(dimView)
         tableHeaderView.addSubview(heartButton)
+        tableHeaderView.addSubview(ratingImageView)
         labelStackView.addArrangedSubview(restaurantLabel)
         labelStackView.addArrangedSubview(typeLabel)
         tableHeaderView.addSubview(labelStackView)
+        tableFooterView.addSubview(rateButton)
     }
     
     private func setupConstraints() {
@@ -142,6 +173,13 @@ class DetailViewController: UIViewController {
         }
         heartButton.snp.makeConstraints { make in
             make.top.trailing.equalToSuperview().inset(10)
+        }
+        rateButton.snp.makeConstraints { make in
+            make.edges.equalToSuperview().inset(20)
+        }
+        ratingImageView.snp.makeConstraints { make in
+            make.bottom.trailing.equalToSuperview().inset(20)
+            make.size.equalTo(CGSize(width: 52, height: 50))
         }
     }
     
@@ -169,6 +207,15 @@ class DetailViewController: UIViewController {
         config.baseForegroundColor = restaurant.isFavorite ? .systemYellow : .white
         config.contentInsets = .zero
         heartButton.configuration = config
+    }
+    
+    @objc private func rateButtonTapped() {
+        guard let restaurant else { return }
+        let reviewVC = RestaurantReviewViewController(restaurant: restaurant)
+        reviewVC.delegate = self
+        reviewVC.modalPresentationStyle = .fullScreen
+        reviewVC.modalTransitionStyle = .crossDissolve
+        navigationController?.present(reviewVC, animated: true)
     }
 }
 
@@ -213,6 +260,21 @@ extension DetailViewController: UITableViewDataSource, UITableViewDelegate {
         guard indexPath.row == 2 else { return }
         let detailMapViewController = DetailMapViewController(restaurant: restaurant)
         navigationController?.pushViewController(detailMapViewController, animated: true)
+    }
+}
+
+extension DetailViewController: RestaurantReviewDelegate {
+    func didSelectRating(rating: Restaurant.Rating) {
+        ratingImageView.image = UIImage(named: rating.image)
+        
+        let scaleTransform = CGAffineTransform.init(scaleX: 0.1, y: 0.1)
+        ratingImageView.transform = scaleTransform
+        ratingImageView.alpha = 0
+        
+        UIView.animate(withDuration: 0.4, delay: 0, usingSpringWithDamping: 0.3, initialSpringVelocity: 0.7, options: []) {
+            self.ratingImageView.transform = .identity
+            self.ratingImageView.alpha = 1
+        }
     }
 }
 
@@ -387,7 +449,11 @@ class RestaurantDetailMapCell: UITableViewCell {
     
     func setupViews() {
         mapView.layer.cornerRadius = 20
-        mapView.clipsToBounds = true
+        mapView.isScrollEnabled = false
+        mapView.isZoomEnabled = false
+        mapView.isRotateEnabled = false
+        mapView.isPitchEnabled = false
+        mapView.isUserInteractionEnabled = false
         contentView.addSubview(mapView)
     }
     

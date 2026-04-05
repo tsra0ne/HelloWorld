@@ -314,6 +314,10 @@ class RestaurantViewController: UIViewController {
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationController?.hidesBarsOnSwipe = true
         
+        let rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(plusButtonTapped))
+        
+        navigationItem.rightBarButtonItem = rightBarButtonItem
+        
         if let appearance = navigationController?.navigationBar.standardAppearance {
             appearance.configureWithTransparentBackground()
             
@@ -331,6 +335,11 @@ class RestaurantViewController: UIViewController {
         setupConstraints()
         configureDataSource()
         applySnapshot(data: restaurants)
+    }
+    
+    @objc private func plusButtonTapped() {
+        let newRestaurantVC = NavigationController(rootViewController: NewRestaurantViewController())
+        navigationController?.present(newRestaurantVC, animated: true)
     }
     
     override func viewWillAppear(_ animated: Bool) {
